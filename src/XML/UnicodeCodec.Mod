@@ -1,7 +1,7 @@
 MODULE XMLUnicodeCodec;
 
 IMPORT
-  Strings, Unicode := oocUnicode;
+  Strings := OakStrings, Unicode := oocUnicode;  (* polpo: OakStrings is the Strings of voc *)
 
 
 CONST
