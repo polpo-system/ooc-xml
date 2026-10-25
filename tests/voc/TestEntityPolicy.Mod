@@ -26,8 +26,8 @@ BEGIN COPY("memory:external-test", text) END GetString;
 PROCEDURE (resource: Resource) GetChannel(mode: URI.ChannelMode; VAR res: M.Msg): Ch.Channel;
   VAR channel: Mem.Channel; writer: Ch.Writer;
 BEGIN
-  ASSERT(mode = URI.channelOld, 1); INC(opens);
-  channel := Mem.Tmp("", {Mem.read, Mem.write}, res); ASSERT(res = NIL, 2);
+  ASSERT(mode = URI.channelOld, 201); INC(opens);
+  channel := Mem.Tmp("", {Mem.read, Mem.write}, res); ASSERT(res = NIL, 202);
   writer := channel.NewWriter(); writer.WriteBytes(resource.text^, 0, S.Length8(resource.text^));
   RETURN channel
 END GetChannel;
@@ -47,7 +47,7 @@ PROCEDURE (capture: Capture) Characters(VAR text: D.StringVar; start, end: D.Cha
   VAR i: LONGINT;
 BEGIN
   FOR i := start TO end-1 DO
-    ASSERT(capture.length < LEN(capture.text)-1, 3);
+    ASSERT(capture.length < LEN(capture.text)-1, 203);
     capture.text[capture.length] := text[i]; INC(capture.length)
   END;
   capture.text[capture.length] := 0
@@ -70,7 +70,7 @@ BEGIN
   NEW(resolver.resource.text, S.Length8(replacement)+1); COPY(replacement, resolver.resource.text^);
   NEW(capture); B.Init(capture); capture.length := 0; capture.text[0] := 0;
   capture.skipped := 0; capture.ends := 0;
-  input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 4);
+  input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 204);
   writer := input.NewWriter(); writer.WriteBytes(text, 0, S.Length8(text));
   parser := P.NewChannel(input, base, NIL, resolver, capture); parser.followExternalRef := follow;
   opens := 0; parser.ParseDocument; input.Close;
@@ -79,8 +79,8 @@ BEGIN
     msg := parser.errList.msgList;
     WHILE msg # NIL DO msg.GetText(error); Out.String(error); Out.Ln; msg := msg.nextMsg END
   END;
-  ASSERT(opens = expectedOpens, 5); ASSERT((parser.errList.msgCount = 0) = valid, 6);
-  ASSERT((capture.ends = 1) & S.Equal8(capture.text, expectedText), 7);
+  ASSERT(opens = expectedOpens, 205); ASSERT((parser.errList.msgCount = 0) = valid, 206);
+  ASSERT((capture.ends = 1) & S.Equal8(capture.text, expectedText), 207);
   RETURN capture
 END Check;
 
@@ -94,16 +94,16 @@ BEGIN
   resolver.resource.text[1] := 0X;
   NEW(resolver.externalDTD.text, 128);
   COPY('<!ENTITY % e SYSTEM "external.ent"><!ENTITY x "%e;">', resolver.externalDTD.text^);
-  input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 10);
+  input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 210);
   writer := input.NewWriter();
   text := '<!DOCTYPE r SYSTEM "external.dtd"><r/>';
   writer.WriteBytes(text, 0, S.Length8(text));
   parser := P.NewChannel(input, base, NIL, resolver, B.New()); parser.followExternalRef := TRUE;
   opens := 0; parser.ParseDocument;
-  ASSERT(opens = 2, 11);
+  ASSERT(opens = 2, 211);
   found := FALSE; msg := parser.errList.msgList;
   WHILE msg # NIL DO IF msg.code = 27 THEN found := TRUE END; msg := msg.nextMsg END;
-  ASSERT(found, 12); input.Close
+  ASSERT(found, 212); input.Close
 END InternalizedEncoding;
 
 PROCEDURE BudgetedExternal(text, dtd, replacement: ARRAY OF CHAR; repeats: LONGINT);
@@ -162,7 +162,7 @@ BEGIN
   capture := Check('<!DOCTYPE r SYSTEM "external.dtd"><r/>', '<!ELEMENT r EMPTY>', FALSE, TRUE, 0, "");
   capture := Check('<!DOCTYPE r SYSTEM "external.dtd"><r/>', '<!ELEMENT r EMPTY>', TRUE, TRUE, 1, "");
   capture := Check('<!DOCTYPE r [<!ENTITY e SYSTEM "external.ent">]><r>&e;</r>', "external text", FALSE, TRUE, 0, "");
-  ASSERT(capture.skipped = 1, 8);
+  ASSERT(capture.skipped = 1, 208);
   capture := Check('<!DOCTYPE r [<!ENTITY e SYSTEM "external.ent">]><r>&e;</r>', "external text", TRUE, TRUE, 1, "external text");
   capture := Check('<!DOCTYPE r [<!ENTITY % e SYSTEM "external.ent">%e;]><r/>', '<!ELEMENT r EMPTY>', FALSE, TRUE, 0, "");
   capture := Check('<!DOCTYPE r [<!ENTITY % e SYSTEM "external.ent">%e;]><r/>', '<!ELEMENT r EMPTY>', TRUE, TRUE, 1, "");
@@ -176,7 +176,7 @@ BEGIN
 END Checks;
 
 BEGIN
-  base := URIParser.NewURI("file:/xml-tests/document.xml", NIL, result); ASSERT(result = NIL, 9);
+  base := URIParser.NewURI("file:/xml-tests/document.xml", NIL, result); ASSERT(result = NIL, 209);
   Checks; InternalizedEncoding; ExpansionBeforeOpen;
   BudgetedExternal('<!DOCTYPE r SYSTEM "external.dtd"><r>&e;&e;</r>',
     '<!ENTITY e SYSTEM "external.ent">', 'external text', 2);
