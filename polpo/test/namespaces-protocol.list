@@ -1,0 +1,25 @@
+# the callbacks of the parser, compared with the protocol of ooc-libxml (run in namespaces/)
+0 epn valid/001.xml valid/out/001.xml
+0 epn valid/002.xml valid/out/002.xml
+0 epn valid/003.xml valid/out/003.xml
+0 epn valid/004.xml valid/out/004.xml
+0 epn valid/005.xml valid/out/005.xml
+0 epn valid/006.xml valid/out/006.xml
+0 epn valid/007.xml valid/out/007.xml
+0 epn valid/008.xml valid/out/008.xml
+0 epn valid/009.xml valid/out/009.xml
+1 epn not-wf/001.xml
+1 epn not-wf/002.xml
+1 epn not-wf/003.xml
+1 epn not-wf/004.xml
+1 epn not-wf/005.xml
+1 epn not-wf/006.xml
+1 epn not-wf/007.xml
+1 epn not-wf/008.xml
+1 epn not-wf/009.xml
+1 epn not-wf/010.xml
+1 epn not-wf/011.xml
+1 epn not-wf/012.xml
+1 epn not-wf/013.xml
+1 epn not-wf/014.xml
+1 epn not-wf/015.xml

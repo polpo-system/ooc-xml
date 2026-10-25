@@ -1,0 +1,7 @@
+# the callbacks of the parser, compared with the protocol of ooc-libxml (run in protocol/)
+0 ep valid/001.xml valid/out/001.xml
+0 ep valid/002.xml valid/out/002.xml
+0 ep valid/003.xml valid/out/003.xml
+0 ep valid/004.xml valid/out/004.xml
+0 ep valid/005.xml valid/out/005.xml
+1 ep not-wf/001.xml
