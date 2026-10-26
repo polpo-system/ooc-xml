@@ -5,11 +5,11 @@ ROOT := $(CURDIR)
 MODULES := XMLUnicodeCodec XMLUnicodeCodecUTF8 XMLUnicodeCodecUTF16 \
 	XMLUnicodeCodecASCII XMLUnicodeCodecLatin1 XMLUnicodeCodecImportAll \
 	XMLLimits XMLInputBuffer XMLUnicodeBuffer XMLDTD XMLEntityResolver \
-	XMLError XMLLocator XMLBuilder XMLParser XMLBuilderNamespaces \
+	XMLError XMLLocator XMLBuilder XMLParser XMLBuilderNamespaces XMLStream \
 	XMLRegexp XMLBuilderValidation XMLWriter XMLBuilderCanonical XMLBuilderParserProtocol \
 	XMLBasicElement XMLBasicParser XMLBasicDataType XMLCheck \
 	TestUnicodeCodecs TestCodecVectors TestUnicodeMessages TestMemoryBuffers TestDTDResolver TestParser \
-	TestNamespaces TestValidation TestWriter TestBasic TestProtocol TestEntityPolicy TestLimits
+	TestNamespaces TestStream TestValidation TestWriter TestBasic TestProtocol TestEntityPolicy TestLimits
 
 .PHONY: all codecs codec-vectors buffers resolver parser namespaces validation writer basic xmlcheck conformance limits fuzz test clean
 all: basic
@@ -50,6 +50,7 @@ parser: resolver
 
 namespaces: parser
 	cd "$(BUILD)" && $(VOC) $(OFLAGS) "$(ROOT)/src/XML/Builder/Namespaces.Mod"
+	cd "$(BUILD)" && $(VOC) $(OFLAGS) "$(ROOT)/src/XML/Stream.Mod"
 
 validation: namespaces
 	cd "$(BUILD)" && $(VOC) $(OFLAGS) \
@@ -81,6 +82,8 @@ test: basic codec-vectors
 	"$(BUILD)/TestParser"
 	cd "$(BUILD)" && $(VOC) $(OFLAGS) -m "$(ROOT)/tests/voc/TestNamespaces.Mod"
 	"$(BUILD)/TestNamespaces"
+	cd "$(BUILD)" && $(VOC) $(OFLAGS) -m "$(ROOT)/tests/voc/TestStream.Mod"
+	timeout 20 "$(BUILD)/TestStream"
 	cd "$(BUILD)" && $(VOC) $(OFLAGS) -m "$(ROOT)/tests/voc/TestValidation.Mod"
 	"$(BUILD)/TestValidation"
 	cd "$(BUILD)" && $(VOC) $(OFLAGS) -m "$(ROOT)/tests/voc/TestWriter.Mod"
@@ -114,6 +117,6 @@ clean:
 	rm -f $(foreach module,$(MODULES),$(foreach ext,c h o sym,"$(BUILD)/$(module).$(ext)")) \
 		"$(BUILD)/TestUnicodeCodecs" "$(BUILD)/TestCodecVectors" "$(BUILD)/TestUnicodeMessages" \
 		"$(BUILD)/TestMemoryBuffers" "$(BUILD)/TestDTDResolver" "$(BUILD)/TestParser" \
-		"$(BUILD)/TestNamespaces" "$(BUILD)/TestValidation" "$(BUILD)/TestWriter" \
+		"$(BUILD)/TestNamespaces" "$(BUILD)/TestStream" "$(BUILD)/TestValidation" "$(BUILD)/TestWriter" \
 		"$(BUILD)/TestBasic" "$(BUILD)/TestProtocol" "$(BUILD)/TestEntityPolicy" "$(BUILD)/TestLimits" \
 		"$(BUILD)/XMLCheck"

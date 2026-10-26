@@ -48,6 +48,10 @@ For DTD validation, wrap the resulting builder with
 Enable external references when the document uses an external DTD.
 `XMLWriter` generates XML with optional indentation and encoding declarations.
 See [writing XML](doc/WritingXML.md) for its interfaces and output checks.
+`XMLStream` accepts arbitrary UTF-8 byte chunks, retaining one bounded child
+element and its opening stream's namespace context. It returns exact byte
+consumption at each header/stanza/close boundary, supporting XMPP stream
+restarts. See [incremental element streams](doc/Streaming.md).
 The [basic element interfaces](doc/BasicElements.md) construct application
 objects through element factories and typed attribute helpers.
 `XMLUnicodeCodecImportAll` registers the bundled ASCII, Latin-1,
@@ -90,7 +94,7 @@ UTF-8/UTF-16 round trips, escaping, long names/URIs, indentation and partial
 channel writes. Basic-element tests cover factory lookup, typed values,
 application checks, locators, stack growth and long Unicode buffers. Protocol
 tests reparse callback traces, including malformed input and namespace events.
-The thirteen integration programs, including all 114 original codec vectors,
+The fourteen integration programs, including all 114 original codec vectors,
 pass with GCC and Clang in
 C23 mode, TCC and Clang ASan/UBSan.
 
