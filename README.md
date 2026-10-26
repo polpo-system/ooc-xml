@@ -43,6 +43,11 @@ For validation, wrap that builder with `XMLBuilderValidation.New` and set `parse
 (external references are needed when the DTD is external). `polpo/src/XMLCheck0.Mod` shows all
 of it on one page.
 
+`XMLStream` reads a stream of elements as XMPP has it: it takes UTF-8 bytes in pieces of any
+size, keeps the namespaces of the opening element and one bounded child element at a time, and
+says how many bytes each header, stanza and the closing tag took, so a stream can be restarted
+(`doc/Streaming.md`).
+
 The parser has limits against hostile input, but its review is not finished: parse documents
 you trust. The documents in `doc/` describe the limits (`Security.md`), the conformance cases
 (`Conformance.md`), writing XML (`WritingXML.md`) and the element objects of `XMLBasicParser`
@@ -50,7 +55,7 @@ you trust. The documents in `doc/` describe the limits (`Security.md`), the conf
 
 ## What is here
 
-    src/XML/              the library, 24 modules (src/XML/Parser.Mod is XMLParser)
+    src/XML/              the library, 25 modules (src/XML/Parser.Mod is XMLParser)
     tools/XMLCheck.Mod    the checking program of voc
     tests/                the conformance suites, the local fixtures, the voc tests and runners
     polpo/src/            XMLCheck0 (XMLCheck of voc as a procedure) and the command xmlcheck
@@ -76,10 +81,11 @@ The changes for polpo, after the voc port:
 
 The tests of the voc port, with Oberon commands in place of its Python runners:
 
-    XMLTests.Run              the 12 voc test programs and TestCodecVectors (the 114 vectors of
+    XMLTests.Run              the 13 voc test programs and TestCodecVectors (the 114 vectors of
                               src/TestCodecs.Mod): codecs, messages, memory channels, DTD and
                               entity resolution, the parser, namespaces, validation, the writer,
-                              element objects, the protocol, external entities, resource limits
+                              element objects, the protocol, external entities, resource limits,
+                              element streams
     XMLConformance.Run list   the cases of the lists, 2687 in all: well-formedness of James
                               Clark's xmltest and the namespace fixtures (384), canonical output
                               of xmltest, ibm and sun (339), validation with xmltest, ibm, sun and
