@@ -14,6 +14,7 @@ integer widths, record extensions and method signatures must agree.
 | Dependency | Status |
 | --- | --- |
 | `XMLParser`, `XMLBuilder`, `XMLLocator`, `XMLError` | Ported and tested with in-memory and file inputs, UTF-16 callbacks and UTF-8 diagnostics. |
+| `XMLStream` | Additive bounded UTF-8 element-stream framing, namespace inheritance, exact consumption and explicit restarts; see [streaming](Streaming.md). |
 | `XMLBuilderNamespaces` | Ported with scoped declarations, implicit `xml` bindings, duplicate expanded-name checks and Unicode coverage. |
 | `XMLBuilderValidation`, `XMLRegexp` | Ported DTD validation and content-model matching; tested with internal/external DTDs and Unicode attributes. |
 | `XMLWriter`, `XMLBuilderCanonical` | Ported XML generation and canonical forms; round-trip and reference-output tests cover Unicode, escaping, attribute sorting and notations. |
