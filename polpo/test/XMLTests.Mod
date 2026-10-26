@@ -6,11 +6,11 @@ MODULE XMLTests;  (* loksh XMLTests.Run: the test programs of voc's xml port *)
 
 IMPORT TestUnicodeCodecs, TestCodecVectors, TestUnicodeMessages, TestMemoryBuffers,
   TestDTDResolver, TestParser, TestNamespaces, TestValidation, TestWriter, TestBasic,
-  TestProtocol, TestEntityPolicy, TestLimits, out;
+  TestProtocol, TestEntityPolicy, TestLimits, TestStream, out;
 
 PROCEDURE Run*;
 BEGIN
-  out.String("XMLTests: 13 test modules passed"); out.Ln
+  out.String("XMLTests: 14 test modules passed"); out.Ln
 END Run;
 
 END XMLTests.
