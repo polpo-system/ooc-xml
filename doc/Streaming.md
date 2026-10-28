@@ -29,6 +29,12 @@ frame boundary on a stream without an error. Transport EOF is separate:
 
 ## Parsing and namespace context
 
+Namespace names are validated as URI references and retain their literal
+spelling after URI character escaping. Relative namespace names, including
+the legacy `vcard-temp` name, are accepted in memory-backed streams without
+a document base URI. A synthetic hierarchical base is used only for syntax
+validation; no URI is retrieved or substituted into the namespace name.
+
 The adapter buffers one bounded stanza. It frames markup across chunk boundaries,
 then checks the complete frame with the existing `XMLParser`, UTF-8 codec and
 namespace builder. Each stanza is parsed inside the saved opening element and
@@ -74,11 +80,11 @@ restricted markup, resource limits and deterministic malformed-input mutations.
 
 ## Validation status
 
-On 26 October 2026, the stream tests and the full XML/shared regression suites
-pass on x86-64 Linux with GCC/C23, Clang/C23, TCC and Clang ASan/UBSan. The
+The stream tests and the full XML/shared regression suites pass on x86-64 Linux
+with GCC/C23, Clang/C23, TCC and Clang ASan/UBSan. The
 stream program adds 232 chunk-size runs and 486 malformed-input mutations.
 Lifetime checks consume 256 KiB of keepalive whitespace and 256 stanzas with
 an 8-byte stanza limit, exercising per-frame rather than connection-wide bounds.
 The existing 2,687 conformance/output, 53 hostile-input and 2,655 mutation cases
-also pass. A fresh VOC modular build passes the stream consumer and 223 bundled
+also pass. The VOC modular build passes the stream consumer and bundled
 ABI/load checks. Native Windows validation remains pending.
