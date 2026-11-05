@@ -9,7 +9,7 @@ MODULE XMLConformance;  (* runs the XML conformance cases of a list with XMLChec
    "-" for none; the output of an accepted case is compared with the bytes of the reference
    file. Lines starting with # are comments. Paths are relative to the current directory. *)
 
-IMPORT Files, Texts, out, IntStr, Str := oocStrings, M := Msg, Mem := IOMemory, X := XMLCheck0;
+IMPORT Files, Texts, Out, IntStr, Str := oocStrings, M := Msg, Mem := IOMemory, X := XMLCheck0;
 
 CONST Max = 512;
 
@@ -17,7 +17,7 @@ VAR checks, failed: LONGINT;
 
 PROCEDURE Fail(VAR line: ARRAY OF CHAR; why: ARRAY OF CHAR);
 BEGIN
-  INC(failed); out.String("FAIL "); out.String(line); out.String(": "); out.String(why); out.Ln
+  INC(failed); Out.String("FAIL "); Out.String(line); Out.String(": "); Out.String(why); Out.Ln
 END Fail;
 
 (* does the output of ch have the bytes of the file ref; why says where they differ *)
@@ -86,7 +86,7 @@ BEGIN
     IF msg # NIL THEN msg.GetText(text); Str.Append(", ", why); Str.Append(text, why) END;
     Fail(line, why);
     IF (r = X.rejected) & (output # NIL) THEN
-      k := 0; WHILE (k < output.Length()) & (k < 400) DO out.Char(output.file.data[k]); INC(k) END; out.Ln
+      k := 0; WHILE (k < output.Length()) & (k < 400) DO Out.Char(output.file.data[k]); INC(k) END; Out.Ln
     END
   ELSIF (r = X.accepted) & (ref # "") & ~Same(output, ref, why) THEN Fail(line, why)
   END;
@@ -98,7 +98,7 @@ VAR f: Files.File; R: Files.Rider; line: ARRAY 2 * Max OF CHAR; c: CHAR; n: LONG
 BEGIN
   checks := 0; failed := 0;
   f := Files.Old(name);
-  IF f = NIL THEN out.String("FAIL no list "); out.String(name); out.Ln; RETURN END;
+  IF f = NIL THEN Out.String("FAIL no list "); Out.String(name); Out.Ln; RETURN END;
   Files.Set(R, f, 0); Files.Read(R, c);
   WHILE ~R.eof DO
     n := 0;
@@ -110,8 +110,8 @@ BEGIN
     IF n > 0 THEN Case(line) END;
     IF ~R.eof THEN Files.Read(R, c) END
   END;
-  out.String("XMLConformance "); out.String(name); out.String(": ");
-  out.Int(checks, 0); out.String(" checks, "); out.Int(failed, 0); out.String(" failed"); out.Ln
+  Out.String("XMLConformance "); Out.String(name); Out.String(": ");
+  Out.Int(checks, 0); Out.String(" checks, "); Out.Int(failed, 0); Out.String(" failed"); Out.Ln
 END RunList;
 
 (* XMLConformance.Run list ... *)
@@ -120,7 +120,7 @@ VAR A: Texts.Reader; name: ARRAY Max OF CHAR; any: BOOLEAN;
 BEGIN
   Texts.OpenArgs(A); any := FALSE;
   WHILE Texts.Arg(A, name) DO any := TRUE; RunList(name) END;
-  IF ~any THEN out.String("usage: XMLConformance.Run list ..."); out.Ln END
+  IF ~any THEN Out.String("usage: XMLConformance.Run list ..."); Out.Ln END
 END Run;
 
 END XMLConformance.

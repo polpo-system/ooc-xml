@@ -9,7 +9,7 @@ MODULE XMLStress;  (* hostile and mutated XML inputs for the parser of ooc-xml *
    protocol): each must be accepted or rejected. The mutations come from a fixed seed (the
    minimal standard generator of Park and Miller), so every run checks the same inputs. *)
 
-IMPORT Files, out, M := Msg, Mem := IOMemory, X := XMLCheck0;
+IMPORT Files, Out, M := Msg, Mem := IOMemory, X := XMLCheck0;
 
 CONST
   MB = 1024 * 1024;
@@ -120,10 +120,10 @@ BEGIN
   INC(checks);
   r := X.Check(name, Flags(flags), output, msg);
   IF (r # X.rejected) OR ~Contains(output, diag) THEN
-    INC(failed); out.String("FAIL "); out.String(name); out.String(" "); out.String(flags);
-    out.String(": result "); out.Int(r, 0); out.String(", expected 1 with "); out.String(diag); out.Ln;
+    INC(failed); Out.String("FAIL "); Out.String(name); Out.String(" "); Out.String(flags);
+    Out.String(": result "); Out.Int(r, 0); Out.String(", expected 1 with "); Out.String(diag); Out.Ln;
     IF output # NIL THEN
-      k := 0; WHILE (k < output.Length()) & (k < 400) DO out.Char(output.file.data[k]); INC(k) END; out.Ln
+      k := 0; WHILE (k < output.Length()) & (k < 400) DO Out.Char(output.file.data[k]); INC(k) END; Out.Ln
     END
   END;
   IF output # NIL THEN output.Close END
@@ -247,8 +247,8 @@ BEGIN
   WHILE i < 15 DO BaseName(i, name, flags, diag); Append(name, ".xml"); Delete(name); INC(i) END;
   Delete("zq_extra.xml"); Delete("external.dtd"); Delete("parameters.dtd"); Delete("large.ent");
   Delete("internalize.dtd");
-  out.String("XMLStress.Limits: "); out.Int(checks, 0); out.String(" checks, ");
-  out.Int(failed, 0); out.String(" failed"); out.Ln
+  Out.String("XMLStress.Limits: "); Out.Int(checks, 0); Out.String(" checks, ");
+  Out.Int(failed, 0); Out.String(" failed"); Out.Ln
 END Limits;
 
 (* fuzzing *)
@@ -303,9 +303,9 @@ BEGIN
     INC(checks); name := "zq_fuzz.xml"; fl[0] := modes[k]; fl[1] := 0X;
     r := X.Check(name, Flags(fl), output, msg);
     IF (r # X.accepted) & (r # X.rejected) THEN
-      INC(failed); out.String("FAIL mode "); out.String(fl); out.String(", result "); out.Int(r, 0);
-      out.String(", input:"); i := 0;
-      WHILE i < len DO out.Char(" "); out.Hex(ORD(text[i]), 2); INC(i) END; out.Ln
+      INC(failed); Out.String("FAIL mode "); Out.String(fl); Out.String(", result "); Out.Int(r, 0);
+      Out.String(", input:"); i := 0;
+      WHILE i < len DO Out.Hex(ORD(text[i])); INC(i) END; Out.Ln
     END;
     IF output # NIL THEN output.Close END;
     INC(k)
@@ -351,8 +351,8 @@ BEGIN
     Fuzz1; INC(j)
   END;
   Delete("zq_fuzz.xml");
-  out.String("XMLStress.Fuzz: "); out.Int(checks, 0); out.String(" checks, ");
-  out.Int(failed, 0); out.String(" failed"); out.Ln
+  Out.String("XMLStress.Fuzz: "); Out.Int(checks, 0); Out.String(" checks, ");
+  Out.Int(failed, 0); Out.String(" failed"); Out.Ln
 END Fuzz;
 
 BEGIN

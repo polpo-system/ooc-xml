@@ -1,11 +1,11 @@
 MODULE xmlcheck;  (** checks XML documents with the parser of ooc-xml *)
 
-IMPORT Texts, out, M := Msg, Mem := IOMemory, X := XMLCheck0;
+IMPORT Texts, Out, M := Msg, Mem := IOMemory, X := XMLCheck0;
 
 CONST Max = 1024;
 
 PROCEDURE Ln(s: ARRAY OF CHAR);
-BEGIN out.String(s); out.Ln
+BEGIN Out.String(s); Out.Ln
 END Ln;
 
 PROCEDURE Help*;
@@ -26,14 +26,14 @@ BEGIN
   Ln("  xmlcheck.Check /canonical doc.xml")
 END Help;
 
-(* write the bytes of ch, LF as out.Ln *)
+(* write the bytes of ch, LF as Out.Ln *)
 PROCEDURE Write(ch: Mem.Channel);
 VAR i, n: LONGINT; c: CHAR;
 BEGIN
   n := ch.Length(); i := 0;
   WHILE i < n DO
     c := ch.file.data[i];
-    IF c = 0AX THEN out.Ln ELSE out.Char(c) END;
+    IF c = 0AX THEN Out.Ln ELSE Out.Char(c) END;
     INC(i)
   END
 END Write;
@@ -52,16 +52,16 @@ BEGIN
       ELSIF s = "/canonical" THEN INCL(flags, X.canonical)
       ELSIF s = "/second" THEN INCL(flags, X.second)
       ELSIF s = "/protocol" THEN INCL(flags, X.protocol)
-      ELSE out.String("xmlcheck: unknown option "); Ln(s); bad := TRUE
+      ELSE Out.String("xmlcheck: unknown option "); Ln(s); bad := TRUE
       END
     ELSE
       INC(files);
       r := X.Check(s, flags, output, msg);
       IF (r = X.accepted) & (output # NIL) THEN Write(output)
-      ELSIF r = X.accepted THEN out.String(s); Ln(": accepted")
-      ELSIF r = X.rejected THEN out.String(s); Ln(": rejected"); Write(output)
+      ELSIF r = X.accepted THEN Out.String(s); Ln(": accepted")
+      ELSIF r = X.rejected THEN Out.String(s); Ln(": rejected"); Write(output)
       ELSE
-        out.String(s); out.String(": ");
+        Out.String(s); Out.String(": ");
         IF msg # NIL THEN msg.GetText(text); Ln(text) ELSE Ln("cannot be checked with these options") END
       END;
       IF output # NIL THEN output.Close END
