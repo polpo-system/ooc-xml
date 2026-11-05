@@ -292,6 +292,14 @@ BEGIN
   Doc(6, '<!DOCTYPE r [<!NOTATION n SYSTEM "n"><!ENTITY u SYSTEM "u" NDATA n>]><r/>')
 END Docs;
 
+(* a blank and c in two hexadecimal digits *)
+PROCEDURE Byte(c: CHAR);
+VAR d: ARRAY 4 OF CHAR; h: ARRAY 17 OF CHAR;
+BEGIN
+  h := "0123456789ABCDEF"; d[0] := " "; d[1] := h[ORD(c) DIV 16]; d[2] := h[ORD(c) MOD 16]; d[3] := 0X;
+  Out.String(d)
+END Byte;
+
 (* check text[0..len) in the five modes: accepted or rejected, nothing else *)
 PROCEDURE Fuzz1;
 VAR i: LONGINT; k, r: INTEGER; name: ARRAY 16 OF CHAR; fl: ARRAY 2 OF CHAR; modes: ARRAY 8 OF CHAR;
@@ -305,7 +313,7 @@ BEGIN
     IF (r # X.accepted) & (r # X.rejected) THEN
       INC(failed); Out.String("FAIL mode "); Out.String(fl); Out.String(", result "); Out.Int(r, 0);
       Out.String(", input:"); i := 0;
-      WHILE i < len DO Out.Hex(ORD(text[i])); INC(i) END; Out.Ln
+      WHILE i < len DO Byte(text[i]); INC(i) END; Out.Ln
     END;
     IF output # NIL THEN output.Close END;
     INC(k)
