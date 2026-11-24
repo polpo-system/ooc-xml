@@ -93,7 +93,7 @@ CONST  (* error codes *)
   multipleIDs = 18;
   invalidIDREF = 19;
   invalidStandaloneWhitespace = 20;
-  invalidStandaloneAttrNormalize = 21;  (* polpo: was invalidStandaloneAttrNormalization; identifiers have at most 31 characters *)
+  invalidStandaloneAttrNormalize = 21;
   invalidStandaloneAttrEntityRef = 22;
   invalidStandaloneDefaultAttr = 23;
   invalidStandaloneElemEntityRef = 24;
