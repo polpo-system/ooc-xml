@@ -15,10 +15,10 @@ for hostile input and tested the library against the XML conformance suites
 portia.Install ooc-xml
 ```
 
-It runs on x86 only: the library is built on type-bound procedures, which the x86 compiler of
-polpo compiles with /2 and the compilers of the other ports do not have. It needs the base
-packages ooc-io and ooc-uri (channels, messages, files in memory, URI references) and LongStrings
-of ooc-strings.
+It runs on all ports of polpo. The library is built on type-bound procedures, which the x86
+compiler compiles with the option /2; the recipe gives /2 on every port, and the other compilers
+ignore it. It needs the base packages ooc-io and ooc-uri (channels, messages, files in memory, URI
+references) and LongStrings of ooc-strings.
 
 ## Using
 
@@ -70,12 +70,12 @@ OOC library it uses come with polpo (src/lib/ooc).
 
 The changes for polpo, after the voc port:
 
-- XMLUnicodeCodec imports OakStrings as Strings (the Strings of voc; polpo's Strings is another
-  module).
+- XMLUnicodeCodec imports oocStrings as Strings and calls Capitalize where it called Cap: the
+  plain Strings of voc is the Oakwood module, the one of polpo another; oocStrings is in both.
 - XMLBuilderValidation calls its constant invalidStandaloneAttrNormalization
   invalidStandaloneAttrNormalize: the polpo compilers take identifiers of up to 31 characters.
-- In the voc tests, assertion numbers below 20 have 200 added: the x86 compiler takes numbers
-  from 20 to 255.
+- In the voc tests, assertion numbers below 32 have 200 added: the x86 compiler takes numbers
+  from 20 to 255, the compilers of the other ports from 32.
 
 ## Tests
 
