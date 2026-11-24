@@ -68,14 +68,9 @@ The other files (the oo2c build files, src/IO, src/OS, src/URI) belong to the or
 and the voc port; polpo builds only the modules of src/XML. Its URI modules and the rest of the
 OOC library it uses come with polpo (src/lib/ooc).
 
-The changes for polpo, after the voc port:
-
-- XMLUnicodeCodec imports oocStrings as Strings and calls Capitalize where it called Cap: the
-  plain Strings of voc is the Oakwood module, the one of polpo another; oocStrings is in both.
-- XMLBuilderValidation calls its constant invalidStandaloneAttrNormalization
-  invalidStandaloneAttrNormalize: the polpo compilers take identifiers of up to 31 characters.
-- In the voc tests, assertion numbers below 32 have 200 added: the x86 compiler takes numbers
-  from 20 to 255, the compilers of the other ports from 32.
+src/XML and the voc tests are the same files as in voc-ooc-xml; polpo only adds polpo/. They keep
+to what both voc and the polpo compilers take: XMLUnicodeCodec imports oocStrings, which both
+systems have, as Strings; identifiers have at most 31 characters; assertion numbers start at 32.
 
 ## Tests
 
