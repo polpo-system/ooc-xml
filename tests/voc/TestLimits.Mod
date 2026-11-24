@@ -154,8 +154,8 @@ BEGIN
   entity.attValue := value;
   value.Append(b.NewEntityRef(name, entity)); budget := L.New(); value.SetLimits(budget);
   flattened := value.Flatten(NIL);
-  ASSERT((budget.error # NIL) & (budget.error.code = L.codeBase+L.nesting), 20);
-  ASSERT((budget.depth = 0) & (flattened[0] = 0), 21)
+  ASSERT((budget.error # NIL) & (budget.error.code = L.codeBase+L.nesting), 220);
+  ASSERT((budget.depth = 0) & (flattened[0] = 0), 221)
 END ValueChecks;
 
 BEGIN

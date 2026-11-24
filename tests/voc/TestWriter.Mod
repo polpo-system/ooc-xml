@@ -203,7 +203,7 @@ BEGIN
     w := W.New(partial, C.GetFactory("UTF-8"), FALSE, -1);
     w.StartTagLatin1("r", TRUE); w.WriteLatin1("<&>"); w.EndTag; w.EndOfText;
     IF fail = 1 THEN ASSERT(partial.res # NIL, 219); partial.res := NIL; w.Flush END;
-    ASSERT(partial.res = NIL, 20); Expect(ch, "<r>&lt;&amp;&gt;</r>"); ch.Close
+    ASSERT(partial.res = NIL, 220); Expect(ch, "<r>&lt;&amp;&gt;</r>"); ch.Close
   END
 END PartialChecks;
 
@@ -214,7 +214,7 @@ BEGIN
   output := Memory(); builder := Canon.New(output, C.GetFactory("UTF-8"), format);
   p := P.NewChannel(input, base, NIL, NIL, builder); p.followExternalRef := FALSE;
   p.ParseDocument; Good(p);
-  ASSERT((builder.out.writer.res = NIL) & (builder.out.codec.invalidChars = 0), 21);
+  ASSERT((builder.out.writer.res = NIL) & (builder.out.codec.invalidChars = 0), 221);
   input.Close; RETURN output
 END Canonical;
 
@@ -234,11 +234,11 @@ BEGIN
   Str.Append("]>", text); Str.Append(0AX, text); Str.Append("<r></r>", text);
   Expect(ch, text); ch.Close;
   text := '<!DOCTYPE r [<!NOTATION a SYSTEM "a'; Str.Append("'b", text); Str.Append('">]><r/>', text);
-  ch := Canonical(text, Canon.secondCanonicalForm); b := Parse(ch); ASSERT(b.starts = 1, 22); ch.Close
+  ch := Canonical(text, Canon.secondCanonicalForm); b := Parse(ch); ASSERT(b.starts = 1, 222); ch.Close
 END CanonicalChecks;
 
 BEGIN
-  base := URIParser.NewURI("file:/xml-tests/document.xml", NIL, result); ASSERT(result = NIL, 23);
+  base := URIParser.NewURI("file:/xml-tests/document.xml", NIL, result); ASSERT(result = NIL, 223);
   NEW(context); M.InitContext(context, "TestWriter");
   BasicChecks; IndentChecks; UnicodeChecks; GrowthChecks; URIChecks; PartialChecks; CanonicalChecks;
   Out.String("XML writer and canonical output checks passed"); Out.Ln

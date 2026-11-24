@@ -99,36 +99,36 @@ BEGIN
 		ASSERT((count = 3) & (c.invalidChars = 0), 217);
 		ASSERT((units[0] = 531H) & (units[1] = 0D83DH) & (units[2] = 0DE42H), 218);
 		ASSERT(Encode(c, 3) = 6, 219);
-		FOR n := 0 TO 5 DO ASSERT(encoded[n] = bytes[n+2], 20) END
+		FOR n := 0 TO 5 DO ASSERT(encoded[n] = bytes[n+2], 220) END
 	END;
 	(* Odd final byte in UTF-16; no reading beyond the logical end. *)
 	c := f.NewCodec(); bytes[0] := 05X;
-	ASSERT((Decode(c, 1) = 1) & (units[0] = UC.decodeError) & (c.invalidChars = 1), 21);
+	ASSERT((Decode(c, 1) = 1) & (units[0] = UC.decodeError) & (c.invalidChars = 1), 221);
 	(* The registry is case-insensitive and an unknown encoding is absent. *)
-	ASSERT(UC.GetFactory("UtF-16lE") # NIL, 22);
-	ASSERT(UC.GetFactory("unknown-encoding") = NIL, 23);
+	ASSERT(UC.GetFactory("UtF-16lE") # NIL, 222);
+	ASSERT(UC.GetFactory("unknown-encoding") = NIL, 223);
 	(* A one-byte logical range must ignore continuation bytes after it. *)
 	f := UC.GetFactory("UTF-8"); c := f.NewCodec();
 	bytes[0] := 80X; bytes[1] := 81X; bytes[2] := 82X;
-	ASSERT((Decode(c, 1) = 1) & (c.invalidChars = 1), 24);
+	ASSERT((Decode(c, 1) = 1) & (c.invalidChars = 1), 224);
 	(* Latin-1 preserves the whole octet range, including unsigned 0xFF. *)
-	f := UC.GetFactory("latin1"); ASSERT(f # NIL, 25); c := f.NewCodec();
+	f := UC.GetFactory("latin1"); ASSERT(f # NIL, 225); c := f.NewCodec();
 	bytes[0] := 0FFX;
-	ASSERT((Decode(c, 1) = 1) & (units[0] = 255) & (c.invalidChars = 0), 26);
-	ASSERT((Encode(c, 1) = 1) & (encoded[0] = 0FFX), 27);
+	ASSERT((Decode(c, 1) = 1) & (units[0] = 255) & (c.invalidChars = 0), 226);
+	ASSERT((Encode(c, 1) = 1) & (encoded[0] = 0FFX), 227);
 	(* ASCII rejects Latin-1 and both single-byte codecs reject Unicode
 	   outside their repertoire, counting a surrogate pair as one error. *)
-	f := UC.GetFactory("ascii"); ASSERT(f # NIL, 28); c := f.NewCodec();
-	ASSERT((Decode(c, 1) = 1) & (units[0] = UC.decodeError) & (c.invalidChars = 1), 29);
+	f := UC.GetFactory("ascii"); ASSERT(f # NIL, 228); c := f.NewCodec();
+	ASSERT((Decode(c, 1) = 1) & (units[0] = UC.decodeError) & (c.invalidChars = 1), 229);
 	FOR i := 0 TO 1 DO
 		IF i = 0 THEN f := UC.GetFactory("ASCII") ELSE f := UC.GetFactory("LATIN1") END;
 		c := f.NewCodec(); units[0] := 0D83DH; units[1] := 0DE42H;
-		ASSERT((Encode(c, 2) = 1) & (encoded[0] = "?") & (c.invalidChars = 1), 30)
+		ASSERT((Encode(c, 2) = 1) & (encoded[0] = "?") & (c.invalidChars = 1), 230)
 	END;
 	(* Exact-sized input arrays exercise the fallback with index checks on. *)
 	f := UC.GetFactory("UTF-8"); c := f.NewCodec(); oneByte[0] := 80X;
 	c.Decode(oneByte, 0, 1, units, 0, LEN(units), n, count);
-	ASSERT((n = 1) & (count = 1) & (c.invalidChars = 1), 31);
+	ASSERT((n = 1) & (count = 1) & (c.invalidChars = 1), 231);
 	c := f.NewCodec(); oneUnit[0] := 0D800H;
 	c.Encode(oneUnit, 0, 1, encoded, 0, LEN(encoded), n, count);
 	ASSERT((n = 1) & (count = 1) & (c.invalidChars = 1), 32);

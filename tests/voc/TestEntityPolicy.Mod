@@ -116,22 +116,22 @@ BEGIN
   NEW(resolver.externalDTD.text, S.Length8(dtd)+1); COPY(dtd, resolver.externalDTD.text^);
   size := S.Length8(text)+S.Length8(dtd)+repeats*S.Length8(replacement);
   FOR i := 0 TO size+1 DO
-    input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 20);
+    input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 220);
     writer := input.NewWriter(); writer.WriteBytes(text, 0, S.Length8(text));
     budget := L.New(); budget.maxInputBytes := i;
     parser := P.NewReaderLimited(input.NewReader(), base, NIL, resolver, B.New(), budget);
     parser.followExternalRef := TRUE; opens := 0; parser.ParseDocument;
-    ASSERT((budget.error # NIL) = (i < size), 21);
-    ASSERT(parser.aborted = (i < size), 22); ASSERT(budget.depth = 0, 23);
+    ASSERT((budget.error # NIL) = (i < size), 221);
+    ASSERT(parser.aborted = (i < size), 222); ASSERT(budget.depth = 0, 223);
     IF budget.error # NIL THEN
-      ASSERT(budget.error.code = L.codeBase+L.inputBytes, 24);
+      ASSERT(budget.error.code = L.codeBase+L.inputBytes, 224);
       matches := 0; msg := parser.errList.msgList;
       WHILE msg # NIL DO
         IF msg = budget.error THEN INC(matches) END;
         msg := msg.nextMsg
       END;
-      ASSERT(matches = 1, 25)
-    ELSE ASSERT(parser.errList.msgCount = 0, 26)
+      ASSERT(matches = 1, 225)
+    ELSE ASSERT(parser.errList.msgCount = 0, 226)
     END;
     input.Close
   END
@@ -146,13 +146,13 @@ BEGIN
   NEW(resolver.resource.text, 16); COPY('external text', resolver.resource.text^);
   NEW(resolver.externalDTD.text, 128);
   COPY('<!ENTITY % p SYSTEM "external.ent"><!ENTITY e "%p;">', resolver.externalDTD.text^);
-  input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 30);
+  input := Mem.Tmp("", {Mem.read, Mem.write}, result); ASSERT(result = NIL, 230);
   writer := input.NewWriter(); text := '<!DOCTYPE r SYSTEM "external.dtd"><r/>';
   writer.WriteBytes(text, 0, S.Length8(text));
   budget := L.New(); budget.maxEntityExpansions := 1;
   parser := P.NewReaderLimited(input.NewReader(), base, NIL, resolver, B.New(), budget);
   opens := 0; parser.ParseDocument;
-  ASSERT(parser.aborted & (opens = 1), 31); ASSERT(budget.depth = 0, 32);
+  ASSERT(parser.aborted & (opens = 1), 231); ASSERT(budget.depth = 0, 32);
   ASSERT(budget.error.code = L.codeBase+L.entityExpansions, 33); input.Close
 END ExpansionBeforeOpen;
 

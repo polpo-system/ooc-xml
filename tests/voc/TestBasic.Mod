@@ -157,8 +157,8 @@ BEGIN
     bytes[pos] := "<"; bytes[pos+1] := "/"; bytes[pos+2] := "r"; bytes[pos+3] := ">"; INC(pos, 4)
   END;
   bytes[pos] := 0X; node := Parse(bytes, -1, {}, TRUE);
-  ASSERT((created = 64) & (node.depth = 0), 20);
-  FOR i := 1 TO 63 DO node := node.children.head(Node); ASSERT(node.depth = i, 21) END
+  ASSERT((created = 64) & (node.depth = 0), 220);
+  FOR i := 1 TO 63 DO node := node.children.head(Node); ASSERT(node.depth = i, 221) END
 END ParserChecks;
 
 PROCEDURE Value(text: ARRAY OF CHAR): D.AttValue;
@@ -172,21 +172,21 @@ PROCEDURE DataChecks;
   VAR value: D.AttValue; number, i: LONGINT; bytes: ARRAY 8 OF CHAR;
     long: ARRAY 40001 OF CHAR; uri: URI.URI; units: ARRAY 8 OF D.Char;
 BEGIN
-  ASSERT(T.GetIntAttr(Value("2147483647"), number) & (number = MAX(LONGINT)), 22);
-  ASSERT(~T.GetIntAttr(Value("2147483648"), number), 23);
-  ASSERT(~T.GetIntAttr(Value("-2147483649"), number), 24);
+  ASSERT(T.GetIntAttr(Value("2147483647"), number) & (number = MAX(LONGINT)), 222);
+  ASSERT(~T.GetIntAttr(Value("2147483648"), number), 223);
+  ASSERT(~T.GetIntAttr(Value("-2147483649"), number), 224);
   FOR i := 0 TO 39998 DO long[i] := "0" END; long[39999] := "x"; long[40000] := 0X;
-  ASSERT(~T.GetIntAttr(Value(long), number), 25);
+  ASSERT(~T.GetIntAttr(Value(long), number), 225);
   bytes := "keep";
-  ASSERT(~T.GetStringLatin1Attr(Value("too long"), bytes) & (bytes = "keep"), 26);
+  ASSERT(~T.GetStringLatin1Attr(Value("too long"), bytes) & (bytes = "keep"), 226);
   units[0] := 531H; units[1] := 0;
   value := Value("x"); value.fragmentList(D.Characters).source[0] := units[0];
-  ASSERT(~T.GetStringLatin1Attr(value, bytes) & (bytes = "keep"), 27);
-  ASSERT(T.GetStringLatin1Attr(Value("short"), bytes) & (bytes = "short"), 28);
-  value := Value("path"); ASSERT(T.GetURIAttr(value, base, uri), 29);
-  value := Value("bad%"); ASSERT(~T.GetURIAttr(value, base, uri), 30);
+  ASSERT(~T.GetStringLatin1Attr(value, bytes) & (bytes = "keep"), 227);
+  ASSERT(T.GetStringLatin1Attr(Value("short"), bytes) & (bytes = "short"), 228);
+  value := Value("path"); ASSERT(T.GetURIAttr(value, base, uri), 229);
+  value := Value("bad%"); ASSERT(~T.GetURIAttr(value, base, uri), 230);
   value := Value("a"); value.fragmentList(D.Characters).source[0] := 0D800H;
-  ASSERT(~T.GetURIAttr(value, base, uri) & (uri = NIL), 31)
+  ASSERT(~T.GetURIAttr(value, base, uri) & (uri = NIL), 231)
 END DataChecks;
 
 PROCEDURE BufferChecks;
